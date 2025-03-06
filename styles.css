@@ -1,0 +1,91 @@
+
+/* General styles */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+/* Header */
+header {
+    background: #007bff;
+    color: white;
+    padding: 15px;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+#searchBox {
+    width: 80%;
+    max-width: 400px;
+    padding: 10px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 20px;
+    font-size: 16px;
+    text-align: center;
+}
+
+/* News container */
+#newsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 20px;
+}
+
+/* News card */
+.newsCard {
+    background: white;
+    width: 300px;
+    margin: 15px;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.newsCard:hover {
+    transform: scale(1.05);
+}
+
+/* News image */
+.newsCard img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+/* News text content */
+.newsCard h3 {
+    font-size: 18px;
+    margin: 15px;
+}
+
+.newsCard p {
+    font-size: 14px;
+    margin: 0 15px 15px;
+    color: #555;
+}
+
+/* Read More button */
+.newsCard a {
+    display: block;
+    text-align: center;
+    background: #007bff;
+    color: white;
+    padding: 10px;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 0 0 10px 10px;
+}
+
+.newsCard a:hover {
+    background: #0056b3;
+}
+
