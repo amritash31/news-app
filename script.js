@@ -1,5 +1,5 @@
 
-const API_KEY = "5a36a59ccdb322936c703fd12f3e875b";  
+const API_KEY = "f2d45eb3ea609fab80e78215cb498ecf";  
 const API_URL = `https://gnews.io/api/v4/top-headlines?category=general&lang=en&apikey=${API_KEY}`;
 
 const newsContainer = document.getElementById("newsContainer");
@@ -56,5 +56,6 @@ searchBox.addEventListener("input", (e) => {
 
 // Load default news
 fetchNews();
+
 
 
