@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,25 +6,47 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-color: #fafafa;
+            padding: 20px;
         }
         #newsContainer {
             display: flex;
             flex-wrap: wrap;
             gap: 20px;
+            justify-content: center;
         }
         .newsCard {
             border: 1px solid #ccc;
             padding: 15px;
             width: 300px;
             box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            background-color: white;
+            transition: transform 0.2s ease;
+        }
+        .newsCard:hover {
+            transform: scale(1.03);
         }
         .newsCard img {
             width: 100%;
             height: auto;
+            border-radius: 8px;
         }
         #delayNotice {
             color: orange;
             margin-bottom: 15px;
+            text-align: center;
+        }
+        input {
+            display: block;
+            margin: 0 auto 20px auto;
+            padding: 10px;
+            width: 80%;
+            max-width: 400px;
+            font-size: 16px;
+        }
+        h1 {
+            text-align: center;
         }
     </style>
 </head>
@@ -38,6 +59,7 @@
     <script>
         const API_KEY = "f2d45eb3ea609fab80e78215cb498ecf";  
         const BASE_URL = "https://gnews.io/api/v4";
+        const PROXY = "https://api.allorigins.win/get?url=";
 
         const newsContainer = document.getElementById("newsContainer");
         const searchBox = document.getElementById("searchBox");
@@ -45,28 +67,26 @@
 
         async function fetchNews(query = "") {
             try {
-                let url = `${BASE_URL}/top-headlines?category=general&lang=en&apikey=${API_KEY}`;
+                let apiUrl = `${BASE_URL}/top-headlines?category=general&lang=en&apikey=${API_KEY}`;
                 if (query) {
-                    url = `${BASE_URL}/search?q=${encodeURIComponent(query)}&lang=en&apikey=${API_KEY}`;
+                    apiUrl = `${BASE_URL}/search?q=${encodeURIComponent(query)}&lang=en&apikey=${API_KEY}`;
                 }
 
-                const response = await fetch(url);
+                const proxyUrl = PROXY + encodeURIComponent(apiUrl);
+                const response = await fetch(proxyUrl);
+
                 if (!response.ok) {
                     throw new Error(`HTTP Error: ${response.status} - ${response.statusText}`);
                 }
 
-                const data = await response.json();
-                console.log("API Response:", data); // For debugging
+                const proxyData = await response.json();
+                const data = JSON.parse(proxyData.contents); // Extract actual data
 
-                // Show delay notice if on free plan
-                if (data.information?.realTimeArticles?.message) {
-                    delayNotice.textContent = data.information.realTimeArticles.message;
-                } else {
-                    delayNotice.textContent = "";
-                }
+                console.log("API Response:", data);
 
                 if (Array.isArray(data.articles) && data.articles.length > 0) {
                     displayNews(data.articles);
+                    delayNotice.textContent = "";
                 } else {
                     newsContainer.innerHTML = `<p>No news articles available at the moment.</p>`;
                 }
@@ -74,8 +94,9 @@
                 console.error("Error fetching news:", error.message);
                 delayNotice.textContent = "";
                 newsContainer.innerHTML = `
-                    <p style="color:red;">
-                        Failed to load news: ${error.message}
+                    <p style="color:red; text-align:center;">
+                        ⚠️ Failed to load news: ${error.message}<br>
+                        (Possible reasons: CORS issue, API limit reached, or invalid key.)
                     </p>`;
             }
         }
@@ -96,19 +117,17 @@
             });
         }
 
-        // Optional: debounce input to avoid too many requests
+        // Debounced search
         let debounceTimeout;
         searchBox.addEventListener("input", (e) => {
             clearTimeout(debounceTimeout);
             debounceTimeout = setTimeout(() => {
                 fetchNews(e.target.value.trim());
-            }, 500); // Delay search by 500ms
+            }, 500);
         });
 
-        // Load default news on page load
+        // Initial load
         fetchNews();
     </script>
 </body>
 </html>
-
-
